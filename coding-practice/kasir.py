@@ -1,28 +1,28 @@
 warkop = "=== SELAMAT DATANG DI WARKOP EMUN ==="
-
 total_belanja = 0
-
 keranjang = {}
-
-nota = ""
 
 def garis():
   print("=" * len(warkop))
 
 def tampilkan_keranjang(massage):
   print(massage)
-  for key, value in keranjang.items():
-    print(f"- {value['jumlah']} {value['nama']:<10} x Rp{value['harga']} = Rp{value['subtotal']:>6}")
+for key, value in keranjang.items():
+    harga_format = f"Rp{value['harga']:,}".replace(",", ".")
+    subtotal_format = f"Rp{value['subtotal']:,}".replace(",", ".")
+    print(f"- {value['jumlah']} {value['nama']:<10} x {harga_format} = {subtotal_format:>8}")
 
 def buat_nota():
-  global nota
+  nota = ""
   laporan = f" Nota Pembelian {nama_pembeli} "
   nota += f"{laporan:=^{len(warkop)}}\n"
   for key, value in keranjang.items():
-    nota += f"- {value['jumlah']} {value['nama']:<10} x Rp{value['harga']} = Rp{value['subtotal']:>6}\n"
+    harga_format = f"Rp{value['harga']:,}".replace(",", ".")
+    subtotal_format = f"Rp{value['subtotal']:,}".replace(",", ".")
+    nota += f"- {value['jumlah']} {value['nama']:<10} x {harga_format} = {subtotal_format}\n"
   nota += "=" * len(warkop) + "\n"
-  nota += f"Total Belanja: Rp{total_belanja}\n"
-  nota += "=" * len(warkop)
+  total_format = f"Rp{total_belanja:,}".replace(",", ".")
+  nota += f"Total Belanja: {total_format}"
   return nota
 
 print(warkop)
@@ -85,8 +85,10 @@ while True:
     break
 
 print(buat_nota())
+garis()
 print(f"Terima kasih {nama_pembeli} telah memesan di Warkop Emun!\n")
 
 with open("laporan_nota.txt", "a") as file:
-    end = f"{nota}{'Transaksi selesai':=^{len(warkop)}}\n\n\n\n"
+    baris_akhir = ' Transaksi selesai '
+    end = f"{buat_nota()}\n{baris_akhir:=^{len(warkop)}}\n\n\n\n"
     file.write(end)
