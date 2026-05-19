@@ -119,13 +119,53 @@ else:
 #output
 #Ya, buah anggur ada dalam daftar  
 ```
-- while: untuk angka akhir yang tidak kita ketahui jadi tetap loop selama kondisi true
+- while: digunakan untuk melakukan perulangan ketika jumlah akhir perulangannya tidak diketahui secara pasti. loop akan terus berjalan selama kondisi yang ditentukan bernilai `True`.
+```python
+# Contoh: Membaca data antrean sampai habis
+antrean = ["Pelanggan A", "Pelanggan B", "Pelanggan C"]
 
-- enumerate: untuk menambahkan index atau penomoran di loop
+while len(antrean) > 0:
+    proses = antrean.pop(0)  # Mengambil elemen pertama
+    print(f"Melayani: {proses}")
 
-- break: berhenti Ketika kondisi benar 
+print("Semua antrean selesai diproses!")
+```
+- enumerate: digunakan untuk menambahkan indeks atau penomoran otomatis pada saat melakukan perulangan (looping) pada sebuah data koleksi (seperti list atau tuple).
+```python
+fitur_bot = ["Kirim Pesan", "Update Sheets", "Cek Status", "Log Out"]
 
-- continue: lewati kondisi benar
+# Menggunakan enumerate untuk membuat menu bernomor
+for nomor, fitur in enumerate(fitur_bot, start=1):
+    print(f"{nomor}. Fitur: {fitur}")
+```
+- break: digunakan untuk menghentikan paksa seluruh jalannya perulangan saat sebuah kondisi tertentu terpenuhi (True), tanpa memedulikan sisa iterasi berikutnya.
+```python
+# Mencari angka tertentu dalam data
+angka_dicari = 7
+kumpulan_data = [1, 3, 5, 7, 9, 11]
 
-- pass: tidak melakukan apapun, gunakan ini jika ingin test tanpa error karna ia akan membuat blok kode kosong
+for angka in kumpulan_data:
+    print(f"Memeriksa: {angka}")
+    if angka == angka_dicari:
+        print("Data ditemukan! Hentikan pencarian.")
+        break  # Loop langsung berhenti di sini, angka 9 dan 11 tidak akan diperiksa
+```
+- continue: digunakan untuk melewati (skip) sisa kode di dalam loop pada iterasi saat ini, dan langsung melompat ke iterasi berikutnya jika kondisi bernilai True.
+```python
+# Mencetak hanya angka ganjil (melewati angka genap)
+for i in range(1, 6):
+    if i % 2 == 0:
+        continue  # Jika genap, abaikan kode di bawah dan langsung lanjut ke angka berikutnya
+    print(f"Angka Ganjil: {i}")
+```
+- pass: pernyataan kosong (null statement) yang tidak melakukan tindakan apa pun. digunakan sebagai tempat penampung sementara (placeholder) saat merancang struktur blok kode agar tidak memicu IndentationError ketika dites.
+```python
+# Menguji struktur logika tanpa menulis isinya terlebih dahulu
+status_koneksi = False
 
+if status_koneksi == True:
+    # TODO: Buat fungsi kirim notifikasi ke WhatsApp di sini nanti
+    pass 
+else:
+    print("Koneksi terputus!")
+```
