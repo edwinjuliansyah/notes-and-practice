@@ -22,7 +22,7 @@ kumpulan data yang terurut dan dapat diakses berdasarkan indeks.
 
 
 ## 3. Dictionary `{}`
-menyimpan data dalam pasangan {`"key"`: `value`} yang dapat diakses langsung melalui key. Dictionary menerima key dengan type string, integer, tuple `(2, 3)`. Jika kunci duplikat, isi kunci lama akan tertimpa dengan isi kunci baru. 
+Menyimpan data dalam pasangan {`"key"`: `value`} yang dapat diakses langsung melalui key. Dictionary menerima key dengan type string, integer, tuple `(2, 3)`. Jika kunci duplikat, isi kunci lama akan tertimpa dengan isi kunci baru. 
 ```python
 kamus = {1: "kopi", 2: "teh", 3: "roti" }
 kamus[2] = "susu" #ubah value
@@ -51,6 +51,48 @@ for i in kamus:
 #nama -> kuda
 #10 -> kepiting
 #(2, 3) -> kerbau
+```
+Ketika ingin melakukan perulangan (looping/iterating) pada dictionary, python menyediakan beberapa cara tergantung pada bagian data mana yang ingin kita ambil.
+- `Standard Iteration` / `.key()`
+  
+    Secara default, jika langsung memasukkan objek dictionary ke dalam perulangan for, Python hanya akan mengambil key dari dictionary tersebut.
+```python
+stok_buah = {'Apel': 10, 'Jeruk': 5, 'Mangga': 8}
+for buah in stok_buah:
+    print(buah)
+#Output
+#Apel
+#Jeruk
+#Mangga
+```
+- `.items()`
+  
+    Metode `.items()` mengembalikan objek view yang berisi pasangan key dan value dalam bentuk tuple (key, value).
+```python
+stok_buah = {'Apel': 10, 'Jeruk': 5, 'Mangga': 8}
+
+for buah, jumlah in stok_buah.items():
+    print(f"Stok buah {buah} tinggal {jumlah} biji.")
+
+#Output
+#Stok buah Apel tinggal 10 biji.
+#Stok buah Jeruk tinggal 5 biji.
+#Stok buah Mangga tinggal 8 biji.
+```
+- `.values()`
+- 
+    Metode `.values()` hanya mengembalikan objek view yang berisi nilai (value) saja dari dictionary, tanpa memedulikan apa kuncinya.
+```python
+stok_buah = {'Apel': 10, 'Jeruk': 5, 'Mangga': 8}
+
+total_stok = 0
+for jumlah in stok_buah.values():
+    total_stok += jumlah
+
+print(f"Total semua buah: {total_stok}")
+
+#Output
+#Total semua buah: 23
 ```
 
 ## 4. Boolean
