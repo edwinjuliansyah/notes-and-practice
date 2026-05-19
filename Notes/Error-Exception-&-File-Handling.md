@@ -30,7 +30,33 @@ except Exception as e:
     print(f"Terjadi kesalahan tak terduga: {e}")
 ```
 
+.__class__ dalam Exception Handling
 
+Saat menggunakan blok except Exception as e:, kita menangkap segala jenis error secara umum. Atribut .__class__ digunakan untuk mengetahui identitas kelas asli (cetak biru) dari error yang terjadi, bukan sekadar membaca pesan teksnya.
+
+Mengapa Membutuhkan .__class__?
+- Akurasi Tipe Data: Menghindari pengecekan error berbasis teks (str(e)) yang rawan berubah/salah deteksi.
+- Sistem Logging / Bot: Mempermudah pengelompokan jenis error (seperti KeyError, ValueError, ZeroDivisionError) ke dalam database, file log, atau laporan otomatis.
+```python
+try:
+    # Contoh error: mengubah teks menjadi objek angka
+    hasil = int("bukan_angka")
+except Exception as e:
+    # Mengambil nama kelas error asli secara otomatis
+    tipe_error = e.__class__  # Output: <class 'ValueError'>
+    
+    print(f" Terjadi Error: {tipe_error}")
+    print(f" Detail Pesan: {e}")
+
+#gunakan .__name__ untuk mengambil nama string dalam class
+try:
+    hasil = int("bukan_angka")
+except Exception as e:
+    tipe_error = e.__class__.__name__  # Output: 'ValueError'
+    
+    print(f" Terjadi Error: {tipe_error}")
+    print(f" Detail Pesan: {e}")
+```
 # File Handling
 - Function `open()` digunakan untuk read, write, create files. open menerima 2 argument open('file_name'/'lokasi_file', 'mode').
   - `file_name` `lokasi_name` untuk mencari file. 
