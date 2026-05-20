@@ -6,13 +6,16 @@ keranjang = {}
 def garis():
   print("=" * len(warkop))
 
+def format_rupiah(nilai):
+  return f"Rp{nilai:,}".replace(",", ".")
+
 def tampilkan_keranjang(massage):
   print(massage)
   for key, value in keranjang.items():
-    harga_format = f"Rp{value['harga']:,}".replace(",", ".")
-    subtotal_format = f"Rp{value['subtotal']:,}".replace(",", ".")
+    harga_format = format_rupiah(value['harga'])
+    subtotal_format = format_rupiah(value['subtotal'])
     print(f"- {value['jumlah']:<5} {value['nama']:<10} x {harga_format:<15} = {subtotal_format:>10}")
-  print(f"{'Total Belanja:':<30} {f'Rp{total_belanja:,}'.replace(',', '.'):>15}")
+  print(f"{'Total Belanja:':<30} {format_rupiah(total_belanja):>15}")
 
 def buat_nota(uang_bayar, uang_kembalian):
   nota = ""
@@ -22,15 +25,15 @@ def buat_nota(uang_bayar, uang_kembalian):
   nota += f"Tanggal Pembelian: {tanggal_waktu_sekarang}\n\n"
 
   for key, value in keranjang.items():
-    harga_format = f"Rp{value['harga']:,}".replace(",", ".")
-    subtotal_format = f"Rp{value['subtotal']:,}".replace(",", ".")
+    harga_format = format_rupiah(value['harga'])
+    subtotal_format = format_rupiah(value['subtotal'])
     nota += f"- {value['jumlah']:<5} {value['nama']:<10} x {harga_format} = {subtotal_format:>10}\n"
   
   nota += "=" * len(warkop) + "\n"
-  total_format = f"Rp{total_belanja:,}".replace(",", ".")
+  total_format = format_rupiah(total_belanja)
   nota += f"{'Total Belanja':<15}: {total_format:>30}\n"
-  uang_bayar = f"Rp{uang_bayar:,}".replace(",", ".")
-  uang_kembalian = f"Rp{uang_kembalian:,}".replace(",", ".")
+  uang_bayar = format_rupiah(uang_bayar)
+  uang_kembalian = format_rupiah(uang_kembalian)
   nota += f"{'Uang Bayar':<15}: {uang_bayar:>30}\n"
   nota += f"{'Uang Kembalian':<15}: {uang_kembalian:>30}"
   return nota
@@ -46,7 +49,7 @@ menu = {
 
 for item in menu:
     nama_menu = menu[item]['nama']
-    harga_menu = f"Rp{menu[item]['harga']:,}".replace(",", ".")
+    harga_menu = format_rupiah(menu[item]['harga'])
     print(f"{item}. {nama_menu:<10} {'|':^25} {harga_menu:>10}")
 garis()
 
