@@ -57,6 +57,9 @@ while True:
     pesanan = int(input("Pilih menu (1-5): ").strip())
     if pesanan in menu:
       quantity = int(input("Masukkan jumlah pesanan: ").strip())
+      if quantity <= 0:
+        print("Jumlah pesanan minimal 1")
+        continue
     else:
       print("Menu tidak tersedia")
       continue
@@ -110,7 +113,8 @@ while True:
 
 uang_kembalian = uang_bayar - total_belanja
 
-print(buat_nota(uang_bayar, uang_kembalian))
+final = buat_nota(uang_bayar, uang_kembalian)
+print(final)
 garis()
 
 baris1 = f'Terima kasih {nama_pembeli}'
@@ -119,6 +123,6 @@ print(f"{baris1:^{len(warkop)}}")
 print(f"{baris2:^{len(warkop)}}\n")
 
 with open("laporan_nota.txt", "a") as file:
-    baris_akhir = ' Transaksi selesai '
-    end = f"{buat_nota(uang_bayar, uang_kembalian)}\n{baris_akhir:=^{len(warkop)}}\n\n\n\n"
-    file.write(end)
+  baris_akhir = ' Transaksi selesai '
+  end = f"{final}\n{baris_akhir:=^{len(warkop)}}\n\n\n\n"
+  file.write(end)
