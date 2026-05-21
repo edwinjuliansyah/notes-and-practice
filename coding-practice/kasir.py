@@ -9,15 +9,15 @@ def garis():
 def format_rupiah(nilai):
   return f"Rp{nilai:,}".replace(",", ".")
 
-def tampilkan_keranjang(massage):
-  print(massage)
+def tampilkan_keranjang(keranjang, total_belanja):
+  print("Isi keranjang saat ini:")
   for key, value in keranjang.items():
     harga_format = format_rupiah(value['harga'])
     subtotal_format = format_rupiah(value['subtotal'])
     print(f"- {value['jumlah']:<5} {value['nama']:<10} x {harga_format:<15} = {subtotal_format:>10}")
   print(f"{'Total Belanja:':<30} {format_rupiah(total_belanja):>15}")
 
-def buat_nota(uang_bayar, uang_kembalian):
+def buat_nota(nama_pembeli, keranjang, total_belanja, uang_bayar, uang_kembalian):
   nota = ""
   laporan = f" Nota Pembelian {nama_pembeli} "
   nota += f"{laporan:=^{len(warkop)}}\n"
@@ -87,7 +87,7 @@ while True:
   total_belanja += subtotal
   
   garis()
-  tampilkan_keranjang("Isi keranjang saat ini:")
+  tampilkan_keranjang(keranjang, total_belanja)
   garis()
 
   while True:
@@ -116,7 +116,7 @@ while True:
 
 uang_kembalian = uang_bayar - total_belanja
 
-final = buat_nota(uang_bayar, uang_kembalian)
+final = buat_nota(nama_pembeli, keranjang, total_belanja, uang_bayar, uang_kembalian)
 print(final)
 garis()
 
