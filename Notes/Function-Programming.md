@@ -25,5 +25,69 @@ hasil_fungsional = [x * 2 for x in angka]
 
 print(hasil_fungsional) # Output: [2, 4, 6, 8, 10]
 print(angka)            # Output data asli tetap aman: [1, 2, 3, 4, 5]
+```
+---
 
+## Apa itu Pure Function?
 
+**Pure Function** bukan sekadar "teknik" menulis kode atau "jenis" fungsi tertentu, melainkan sebuah **karakteristik wajib** dalam Pemrograman Fungsional. Sebuah fungsi baru sah disebut murni jika memenuhi dua syarat mutlak:
+
+1. **Hasilnya Selalu Konsisten (Deterministic):** Jika kita memasukkan input (argumen) yang sama, fungsi tersebut harus selalu mengembalikan hasil yang sama, kapan pun dan berapa kali pun dijalankan.
+2. **Tidak Memiliki Efek Samping (No Side Effects):** Fungsi tidak boleh mengubah status, data, atau variabel apa pun di luar dirinya. Ia tidak merusak data asli yang dimasukkan, tidak mengubah variabel global, bahkan tidak memicu fungsi I/O seperti menulis file atau menampilkan `print()` ke terminal (karena itu mengubah status layar).
+
+---
+
+## Peran dan Fungsinya dalam Aplikasi
+
+* **Mudah Diuji (Testable):** Karena fungsinya terisolasi, kita tidak perlu repot melakukan *setup* database palsu atau memanipulasi variabel global saat melakukan *testing*. Cukup beri input, lalu cek outputnya.
+* **Aman dari Bug Misterius:** Kita bisa yakin 100% bahwa memanggil fungsi ini di bagian mana pun tidak akan merusak data di bagian aplikasi yang lain secara tidak sengaja.
+* **CPU Efisien (Dukungan Concurrency):** Karena sifatnya yang tidak mengubah data secara langsung (*immutability*), banyak core CPU bisa memproses fungsi ini secara bersamaan tanpa ada drama antrean data (*locking*).
+
+---
+
+## Contoh Kode: Kontras Impure vs Pure
+
+### ❌ Contoh Impure Function (Tidak Murni)
+Fungsi di bawah ini tidak murni karena bergantung pada variabel luar dan merusak data asli:
+
+```python
+# Masalah 1: Bergantung pada variabel luar
+faktor_kali = 2
+def hitung_harga_impure(angka):
+    return angka * faktor_kali  # Jika 'faktor_kali' berubah, hasilnya berubah
+
+# Masalah 2: Merusak data asli yang dimasukkan (Side Effect)
+def tambah_barang_impure(keranjang, barang_baru):
+    keranjang.append(barang_baru)  # Mengubah list asli di luar fungsi
+    return keranjang
+
+```
+
+### Contoh Pure Function (Murni)
+Fungsi di bawah ini murni karena semua kebutuhan diisolasi di dalam parameter dan menghasilkan data baru yang aman:
+
+```python
+# Berdiri sendiri, konsisten, dan terisolasi
+def hitung_harga_pure(angka, faktor):
+    return angka * faktor
+
+# Menggunakan konsep Immutability (tidak merusak data asli)
+def tambah_barang_pure(keranjang, barang_baru):
+    # Kita gabungkan list lama dengan list baru untuk menciptakan objek baru di RAM
+    return keranjang + [barang_baru]
+
+# --- UJI COBA ---
+keranjang_asli = ["Laptop", "Mouse"]
+keranjang_baru = tambah_barang_pure(keranjang_asli, "Keyboard")
+
+print("Keranjang Baru:", keranjang_baru)  # Output: ['Laptop', 'Mouse', 'Keyboard']
+print("Keranjang Asli:", keranjang_asli)  # Output: ['Laptop', 'Mouse'] -> TETAP UTUH!
+```
+
+---
+
+## Bagaimana Memory (RAM) Mengelolanya?
+
+Menulis pure function memang membuat Python sering membuat salinan data baru di RAM. Namun, ini tidak akan membuat memori komputer jebol. Python memiliki Garbage Collector otomatis yang akan langsung menghancurkan salinan data tersebut dan mengosongkan RAM kembali begitu fungsinya selesai bekerja.
+
+Kita sengaja mengorbankan sedikit ruang RAM demi memotong waktu tunggu CPU agar aplikasi kita berjalan jauh lebih cepat secara paralel!
