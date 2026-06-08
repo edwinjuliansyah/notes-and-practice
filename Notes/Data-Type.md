@@ -162,3 +162,120 @@ Formatnya `x[start:stop:step]`
 `x[::-2]` : Membalik urutan list dengan lompatan setiap 2 (index ..., 4, 2)
 
 Note: Jika mengambil data dari belakang / reserve lalu angka `start` lebih kecil dari `stop` maka akan error `x[1:4:-1]` hasil tuple kosong
+
+---
+# list comprehension
+
+Komprehensi dalam Python adalah cara untuk membuat urutan baru dari urutan yang sudah ada.
+
+Ada empat jenis pemahaman utama dalam Python: 
+
+- Pemahaman daftar `[ <expression> for x in <sequence> if <condition>]`
+```python
+data = [2,3,5,7,11,13,17,19,23,29,31]
+
+# Ex1: List comprehension: updating the same list
+data = [x+3 for x in data]
+print("Updating the list: ", data)
+
+# Ex2: List comprehension: creating a different list with updated values
+new_data = [x*2 for x in data]
+print("Creating new list: ", new_data)
+
+# Ex3: With an if-condition: Multiples of four:
+fourx = [x for x in new_data if x%4 == 0 ]
+print("Divisible by four", fourx)
+
+# Ex4: Alternatively, we can update the list with the if condition as well
+fourxsub = [x-1 for x in new_data if x%4 == 0 ]
+print("Divisible by four minus one: ", fourxsub)
+
+# Ex5: Using range function:
+nines = [x for x in range(100) if x%9 == 0]
+print("Nines: ", nines)
+```
+- Pemahaman kamus `{ key:value for key, value in <sequence> if <condition> }`
+```python
+# Using range() function and no input list
+usingrange = {x:x*2 for x in range(12)}
+print("Using range(): ",usingrange)
+
+# Lists
+months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+number = [1,2,3,4,5,6,7,8,9,10,11,12]
+
+# Using one input list
+numdict = {x:x**2 for x in number}
+print("Using one input list to create dict: ", numdict)
+
+# Using two input lists
+months_dict = {key:value for (key, value) in zip(number, months)}
+print("Using two lists: ", months_dict)
+```
+- Pemahaman set 
+Pemahaman set berhubungan dengan tipe data set dan sangat mirip dengan pemahaman daftar. Satu-satunya perbedaan utama adalah penggunaan tanda kurung kurawal untuk himpunan, bukan tanda kurung siku seperti pada daftar. Sebagai contoh:
+```python
+set_a = {x for x in range(10,20) if x not in [12,14,16]}
+print(set_a)
+```
+- Pemahaman generator
+Pemahaman Generator (atau sering disebut Generator Expression) adalah cara ringkas untuk membuat sebuah Iterator di Python. Sintaksisnya mirip dengan List Comprehension, tetapi menggunakan tanda kurung biasa ( ) bukan kurung siku [ ].
+
+Berbeda dengan List yang langsung membuat semua data di memori (Eager Evaluation), Generator menggunakan prinsip Lazy Evaluation—ia hanya menyimpan rumus/algoritma dan baru memproduksi data satu per satu saat diminta.
+```python
+# Sintaksis Dasar
+(expression for item in iterable if condition)
+```
+Generator vs Tuple vs List
+
+Meskipun menggunakan tanda kurung (), Generator bukan Tuple!
+
+- List [] & Tuple (): Adalah kontainer data statis. Datanya sudah ada di dalam RAM saat didefinisikan.
+
+- Generator (): Bukan kontainer penyimpan data, melainkan sebuah mesin pencetak data otomatis yang berjalan satu arah. Generator tidak bisa diubah (immutable) karena memang tidak ada data menetap di dalamnya untuk diubah.
+
+4 Cara Memanggil/Mengambil Data dari Generator
+Karena generator tidak menyimpan data dalam bentuk barisan fisik, kamu tidak bisa memanggil data menggunakan indeks seperti gen[0]. Berikut adalah 4 cara resmi untuk mengambil datanya:
+
+1. Menggunakan for Loop (Paling Sering & Paling Aman)
+Python akan otomatis mengambil data satu per satu dan berhenti sendiri tanpa memicu error saat data habis.
+```python
+kuadrat_gen = (x**2 for x in range(1, 4)) # Rumus untuk angka: 1, 4, 9
+
+for angka in kuadrat_gen:
+    print(angka)
+# Output: 1, 4, 9
+```
+2. Menggunakan Fungsi next() (Secara Manual)
+Digunakan jika kamu ingin mengontrol penuh kapan data selanjutnya harus diproduksi di dalam logika backend.
+```python
+antrian = (x for x in ["Budi", "Joko"])
+
+print(next(antrian))  # Output: Budi
+# ... jalankan logika backend lain ...
+print(next(antrian))  # Output: Joko
+
+# Jika dipanggil next(antrian) sekali lagi, akan memicu: Error StopIteration
+```
+3. Mengubahnya Menjadi List/Tuple (Casting)
+Memaksa generator memproduksi semua datanya saat itu juga dan menyimpannya ke memori.Gunakan cara ini hanya jika jumlah datanya kecil. Jika datanya jutaan, RAM server bisa jebol.
+```python
+gen_huruf = (char.upper() for char in "abc")
+list_hasil = list(gen_huruf)
+print(list_hasil)  # Output: ['A', 'B', 'C']
+```
+4. Dimasukkan Langsung ke Fungsi Agregat Python
+Sangat berguna untuk operasi matematika atau pemrosesan teks tanpa membuang memori.
+
+```python
+# Menghitung total 1 sampai 1 juta tanpa memakan RAM
+total = sum(x for x in range(1, 1_000_001)) 
+
+# Menggabungkan teks/string
+kata = (k for k in ["Python", "Backend"])
+print("-".join(kata))  # Output: Python-Backend
+```
+2 Karakteristik Mutlak Generator
+
+- Sifat Sekali Pakai (One-time stream): Generator bergerak satu arah dan tidak bisa di-rewind (mundur). Begitu seluruh data sudah diproduksi/dibaca hingga habis, generator tersebut akan menjadi kosong (mati). Jika ingin digunakan lagi, kamu harus mendefinisikannya ulang.
+- Efisiensi Memori Skala Tinggi (O(1)): Ukuran memori sebuah generator selalu konstan (sangat kecil, sekitar 100 bytes), tidak peduli apakah rumus tersebut ditujukan untuk menghasilkan 5 data atau 50 juta data.
