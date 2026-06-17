@@ -38,8 +38,7 @@ class Transaksi:
       if not self.nama_pembeli.replace(" ", "").isalpha():
         print("Nama harus berupa huruf")
         continue
-      else:
-        break  
+      break  
 
   def hitung_kembalian(self):
     self.uang_kembalian = self.uang_bayar - self.total_belanja
