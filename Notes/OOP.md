@@ -1,19 +1,11 @@
 oop
-- declarative
-- procedural
-- object-oriented
-- function
-- logic
-- even-driven
-- flow-driven
-and more..
 
 bagian oop
 
-class ->defind with 'class' keyword
-	attribute/property -> can be variable
-	behavior/method -> can be function
-	object -> hasilnya
+- class -> defind with class keyword
+- attribute/property -> can be variable
+- behavior/method -> can be function
+- object -> hasilnya
 
 konsep
 
@@ -30,16 +22,8 @@ the ability of function to change its behavior when called by different object
 limits access to method and variable by encasing them in a single unit of scope
 
 - abstraction
+
 hide implementation details for data security
-
-other concepts
-
-method loading
-
-method overriding
-
-constructors
-and more...
 
 ---
 
@@ -59,6 +43,14 @@ inherence memiliki kemampuan untuk menurunkan attribute atau method dari 1 class
 
 - class induk biasanya disebut: parent/super/base class
 - class anak biasanya disebut: child/sub/derived class
+
+Python mendukung beberapa jenis inheritance:
+- Simple: Kelas Anak mewarisi dari satu Kelas Orang Tua.
+- Multiple: Kelas Anak mewarisi dari lebih dari satu Kelas Orang Tua sekaligus (misal: kelas Anak turunan dari kelas Ayah dan Ibu).
+- Multi-level: Warisan berjenjang seperti silsilah (Kakek -> Ayah -> Anak).
+- Hierarchical: Satu Kelas Orang Tua punya banyak Kelas Anak.
+- Hybrid: Campuran dari jenis-jenis di atas. Misal subclass 3 mewarisi dari sub class 2 dan 1. lalu sub class 2 dan 1 mewarisi dari class Utama. (class Utama kakek, sub class 1 dan 2 ayah dan ibu, sub class 3 cucu)
+
 
 contoh dasar 
 ```python
@@ -139,3 +131,31 @@ class FruitFlavour(Fruit):
 
 apple = FruitFlavour()
 ```
+---
+
+#MRO (Method Resolution Order)
+
+MRO adalah aturan atau urutan yang digunakan Python untuk mencari dari kelas mana sebuah fungsi atau variabel harus diambil. Proses penyusunan urutan ini disebut dengan Linearization.
+
+Aturan dasar Python dalam membaca silsilah kelas adalah dari Bawah ke Atas (Bottom to Top), lalu Dari Kiri ke Kanan (Left to Right).
+
+##cara memeriksa MRO
+
+###Cara 1: Menggunakan fungsi .mro() atau atribut .__mro__
+
+Misalkan struktur Multi-level: Kelas A (Kakek), Kelas B (Ayah) turunan dari A, dan Kelas C (Anak) turunan dari B.
+Jika mengetik print(C.mro()), Python akan menampilkan urutannya:
+
+[Class C, Class B, Class A, object]
+
+Contoh Efek MRO pada Variabel:
+
+Jika Kelas A punya variabel num = 5.
+
+Jika Kelas B punya variabel num = 9.
+
+Ketika Kelas C memanggil num, berdasarkan urutan MRO (C -> B -> A), Python akan mengambil nilai dari B terlebih dahulu. Jadi nilainya adalah 9, bukan 5.
+
+###Cara 2: Menggunakan fungsi help()
+
+Jika mengetik help(C), Python akan menampilkan dokumen yang sangat detail. Di bagian paling atas, Python akan menunjukkan urutan MRO-nya, diikuti dengan informasi detail mengenai isi dari kelas tersebut.
