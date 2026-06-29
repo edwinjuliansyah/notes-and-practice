@@ -15,18 +15,23 @@ class Rekening:
     def tambah_saldo(self, input_nominal):
         self.__saldo += input_nominal
 
-    def logic_saldo(self, input_nominal):
+    def _konfirmasi(self, input_nominal):
         while True:
-            konfirmasi = input(f"Anda telah memasukkan nominal sebesar {input_nominal}\nApakah benar? y/n: ").strip().lower()
+            jawaban = input(f"Anda telah memasukkan nominal sebesar {input_nominal}\nApakah benar? y/n: ").strip().lower()
            
-            if konfirmasi == "y":
-                self.tambah_saldo(input_nominal)
+            if jawaban == "y":
                 return True
-            elif konfirmasi == "n":
+            elif jawaban == "n":
                 return False
             else:
                 print("Pastikan ketik y/n\n")
                 continue
+
+    def logic_tambah_saldo(self, input_nominal):
+        if self._konfirmasi(input_nominal):
+            self.tambah_saldo(input_nominal)
+            return True
+        return False
 
     def setor(self):
         while True:
@@ -37,7 +42,7 @@ class Rekening:
                     print("input tidak boleh kurang dari 1")
                     continue
                 else:
-                    berhasil = self.logic_saldo(input_nominal)
+                    berhasil = self.logic_tambah_saldo(input_nominal)
                     if berhasil:                
                         break
            
@@ -48,22 +53,14 @@ class Rekening:
         self.riwayat.append(f"Setor tunai sebanyak +{input_nominal}")    
         print(f"Saldo sebesar {input_nominal} telah ditambahkan ke rekening.\nSaldo saat ini {self.__saldo}\n")
 
-    def kurangi_saldo(self, input_nominal):
-        while True:
-            konfirmasi = input(f"Anda telah memasukkan nominal sebesar {input_nominal}\nApakah benar? y/n: ").strip().lower()
-            
-            if konfirmasi == "y":
-                if input_nominal > self.__saldo:
-                    print("Saldo tidak cukup")
-                    return False
-                else:
-                    self.__saldo -= input_nominal
-                    return True   
-            elif konfirmasi == "n":
+    def logic_kurangi_saldo(self, input_nominal):
+        if self._konfirmasi(input_nominal):
+            if input_nominal > self.__saldo:
+                print("Saldo tidak cukup")
                 return False
-            else:
-                print("Pastikan ketik y/n\n")
-                continue
+            self.__saldo -= input_nominal
+            return True
+        return False
 
     def tarik(self):
         while True:
@@ -74,7 +71,7 @@ class Rekening:
                     print("input tidak boleh kurang dari 1")
                     continue
                 else:
-                    berhasil = self.kurangi_saldo(input_nominal)
+                    berhasil = self.logic_kurangi_saldo(input_nominal)
                     if berhasil:
                         break            
             
@@ -85,7 +82,7 @@ class Rekening:
         self.riwayat.append(f"Tarik tunai -{input_nominal}")
         print(f"Sisa saldo {self.__saldo}\n")
         
-    def transfer(self, rekening_tujuan):
+    def transfer(self, rekening_tujuan: 'Rekening'):
         while True:
             try:
                 input_nominal = int(input("Masukkkan nominal transfer: "))
@@ -94,7 +91,7 @@ class Rekening:
                         print("input tidak boleh kurang dari 1")
                         continue
                     
-                berhasil = self.kurangi_saldo(input_nominal)
+                berhasil = self.logic_kurangi_saldo(input_nominal)
 
                 if berhasil:
                     rekening_tujuan.tambah_saldo(input_nominal)
