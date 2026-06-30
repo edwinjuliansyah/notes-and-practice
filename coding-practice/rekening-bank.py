@@ -3,15 +3,29 @@ class Nasabah:
         self.nama = nama
         self.daftar_rekening = []
 
+    def __str__(self):
+        return f"{self.nama}"
+
     def tambah_rekening(self, jenis_rekening):
         self.daftar_rekening.append(jenis_rekening)
 
+    def tampilkan_daftar_rekening(self):
+        print(f"\n{self.nama} kamu memiliki rekening:")
+        for rekening in self.daftar_rekening:
+            print(rekening)
+
 class Rekening:
-    def __init__ (self, nomor_rekening):
+    def __init__ (self, nomor_rekening, nasabah: 'Nasabah'):
         self.nomor_rekening = nomor_rekening
+        self.nasabah = nasabah
         self.__saldo = 0
         self.riwayat = []
-    
+        nasabah.tambah_rekening(self)
+
+    def __str__(self):
+        jenis = type(self).__name__
+        return f"{jenis} No. {self.nomor_rekening} a.n. {self.nasabah} (Saldo: Rp{self.saldo:,})"
+
     def tambah_saldo(self, input_nominal):
         self.__saldo += input_nominal
 
@@ -101,13 +115,14 @@ class Rekening:
                     break
                 else:
                     print("Transfer gagal")
-                    break
+                    continue
 
             except ValueError:
                 print("Input hanya boleh angka")
                 continue
                 
     def tampilkan_riwayat(self):
+        print(f"Riwayat {type(self).__name__} kamu:")
         for i in self.riwayat:
             print(i)
     
@@ -122,19 +137,50 @@ class Rekening:
             return
         self.__saldo = nilai    
     
-# nomor_rekening = int(input("Masukkan nomor rekening anda: ").strip())
-# running = Rekening(nomor_rekening)
-# running.setor()
-# running.tarik()
-# print(running.saldo)
-# rekening_tujuan = int(input("Masukkan nomor Rekening tujuan: ").strip())
-# running.transfer(rekening_tujuan)
-# running.tampilkan_riwayat()
+class Britama(Rekening):
+    def __init__(self, nomor_rekening, nasabah):
+        super().__init__(nomor_rekening, nasabah)
+        self.limit_harian = 20_000_000
+        self.biaya_admin_bulanan = 15_000
+        self.akses_internasional = True
 
-danang = Rekening(123)
-riko = Rekening(456)
+    def logic_kurangi_saldo(self, input_nominal):
+        if input_nominal > self.limit_harian:
+            print(f"Melebihi limit harian Rp{self.limit_harian}")
+            return False
+        return super().logic_kurangi_saldo(input_nominal)
 
-danang.setor()
-danang.transfer(riko)
-danang.tampilkan_riwayat()
-riko.tampilkan_riwayat()
+class Simpedes(Rekening):
+    def __init__(self, nomor_rekening, nasabah):
+        super().__init__(nomor_rekening, nasabah)
+        self.limit_harian = 5_000_000
+        self.biaya_admin_bulanan = 5_000
+        self.akses_internasional = False
+
+    def logic_kurangi_saldo(self, input_nominal):
+        if input_nominal > self.limit_harian:
+            print(f"Melebihi limit harian Rp{self.limit_harian}")
+            return False
+        return super().logic_kurangi_saldo(input_nominal)
+    
+
+riko = Nasabah('Riko')
+riko_britama = Britama(123, riko)
+riko_simpedes = Simpedes(456, riko)
+
+
+danang = Nasabah('Danang')
+danang_britama = Britama(789, danang)
+
+riko_britama.setor()
+riko_britama.transfer(danang_britama)
+riko_britama.transfer(riko_simpedes)
+
+danang_britama.tarik()
+
+riko.tampilkan_daftar_rekening()
+riko_britama.tampilkan_riwayat()
+riko_simpedes.tampilkan_riwayat()
+
+danang.tampilkan_daftar_rekening()
+danang_britama.tampilkan_riwayat()
