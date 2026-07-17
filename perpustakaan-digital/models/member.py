@@ -1,20 +1,20 @@
 class Member:
-    def __init__(self, id_member, nama):
+    def __init__(self, id_member: str, nama: str) -> None:
         self.id_member = id_member
         self.nama = nama
-        self.daftar_pinjaman = set()
+        self.daftar_pinjaman: set[str] = set()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Nama: {self.nama}\nID: {self.id_member}\nDaftar Pinjaman: {self.daftar_pinjaman}"
     
-    def tambah_pinjaman(self, id_media):
+    def tambah_pinjaman(self, id_media: str) -> bool:
         if id_media in self.daftar_pinjaman:
             return False
         else:
             self.daftar_pinjaman.add(id_media)
             return True
         
-    def hapus_pinjaman(self, id_media):
+    def hapus_pinjaman(self, id_media: str) -> bool:
         if id_media in self.daftar_pinjaman:
             self.daftar_pinjaman.remove(id_media)
             return True
