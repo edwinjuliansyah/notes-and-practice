@@ -1,4 +1,4 @@
-from media import Media
+from models.media import Media
 
 class EbookLisensiBebas(Media):
     def __init__(self, judul: str, id_media: str, genre: set[str], penulis: str) -> None:

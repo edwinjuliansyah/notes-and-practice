@@ -1,4 +1,4 @@
-from media import Media
+from models.media import Media
 from datetime import datetime 
 
 class MajalahDigital(Media):
