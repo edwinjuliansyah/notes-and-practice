@@ -16,3 +16,6 @@ class KatalogService:
             return True
         else:
             return False
+        
+    def semua_media(self) -> list[Media]:
+        return [media for media in self.katalog.values()]

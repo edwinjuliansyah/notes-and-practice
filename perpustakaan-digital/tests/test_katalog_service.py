@@ -31,3 +31,31 @@ def test_hapus_media_gagal_jika_id_tidak_ada():
     hasil = katalog.hapus_media("B009")
     
     assert hasil == False
+
+def test_semua_media_mengembalikan_list_berisi_semua_media():
+    # Arrange: siapin katalog + 2 media berbeda
+    katalog = KatalogService()
+    buku1 = EbookLisensiBebas("Laskar Pelangi", "B001", {"Fiksi"}, "Andrea Hirata")
+    buku2 = EbookLisensiBebas("Bumi Manusia", "B002", {"Fiksi", "Sejarah"}, "Pramoedya")
+    katalog.tambah_media(buku1)
+    katalog.tambah_media(buku2)
+
+    # Act
+    hasil = katalog.semua_media()
+
+    # Assert: harus list, isinya 2, dan kedua buku ada di dalamnya
+    assert len(hasil) == 2
+    assert buku1 in hasil
+    assert buku2 in hasil
+
+
+def test_semua_media_katalog_kosong():
+    # Arrange: katalog baru, belum ada isi
+    katalog = KatalogService()
+
+    # Act
+    hasil = katalog.semua_media()
+
+    # Assert: harus list kosong, bukan None atau error
+    assert hasil == []
+
