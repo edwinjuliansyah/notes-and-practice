@@ -1,0 +1,100 @@
+list menampillkan banyak kode dibagian kiri, l untuk link, d untuk direktori, - untuk file biasa seperti txt
+
+pipe mengubungkan 2 command, output command pertama bisa di teruskan sebagai input command ke dua
+
+file skrip.sh bisa di print jika diberi akses administrator degan chmod 775 file.sh
+
+standar input output dan error
+input biasanya ditandai dengan < atau 0
+output biasanya di tandai dengan > atau 1
+error biasanya ditandai dengan 2>
+
+<input>output2>eror
+
+
+
+grep singkatan dari global regular expression print
+fungsinya sebagai pencarian kata (case sensitive) beberapa fungsi flag dalam grep:
+-i :agar tidak case sensitive
+
+wc (word count) -c (charakter) -w(word)
+
+
+Metodologi yang gesit
+https://www.planview.com/resources/guide/agile-methodologies-a-beginners-guide/
+
+Menginstal git di mac dan windows, instruksi terperinci.
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+Manual Referensi Bash
+https://www.gnu.org/software/bash/manual/html_node/index.html#SEC_Contents
+
+Pengalihan Bash
+https://www.gnu.org/software/bash/manual/html_node/Redirections.html#Redirections
+
+Lembar Kerja Bash
+https://devhints.io/bash
+
+Lembar Cheatsheet Grep
+https://devhints.io/grep
+
+Panduan Grep
+https://man7.org/linux/man-pages/man1/grep.1.html
+
+Sejarah dan Garis Waktu Unix  
+https://unix.org/what_is_unix/history_timeline.html
+
+Sejarah Vim
+https://en.wikipedia.org/wiki/Vim_(text_editor)
+
+Cara bekerja dengan jalur relatif dan absolut 
+https://www.geeksforgeeks.org/absolute-relative-pathnames-unix/
+
+Lembar Kerja Perintah-perintah Unix
+https://cheatography.com/jluis/cheat-sheets/bash-and-unix-commands/
+
+Lembar Kerja Vim
+https://vim.rtorr.com/
+
+
+=========================================
+modul 3 
+membuat kunci ssh dengan ssh-keygen -t ed25519 -C "your@email.com"
+ssh -T git@github.com #test koneksi dengan github
+
+workflow git
+
+menambahkan branch baru
+git checkout -B feature/lesson #menambahkan branch baru dan masuk kedalam branch
+
+git branch feature/lesson #hanya membuat cabang
+
+git branch #mengecek posisi cabang saat ini
+
+konflik git
+
+git deff #membandingkan perubahan atau file atau branch
+
+git blame #melacak perubahan isi file
+git blame -l baris-awal,baris-akhir
+untuk melihat perubahan spesifik di dalam git blame dapat menggunaka git loq -p
+git log -p hash-id
+
+forking
+
+
+Git: Sebuah Kisah Asal Usul
+https://www.linuxjournal.com/content/git-origin-story
+
+Lembar Kerja Git
+https://education.github.com/git-cheat-sheet-education.pdf
+
+Pola dan anti-pola Git untuk pengembang yang sukses 
+https://youtu.be/t_4lLR6F_yk
+
+Bincang-bincang Teknologi: Linus Torvalds tentang git 
+https://www.youtube.com/watch?v=4XpnKHJAok8
+
+Lembar Kerja Vim
+https://devhints.io/vim
+
