@@ -104,4 +104,171 @@ parameter URL (query string): berisi informasi tambahan dalam bentuk pasangan ku
 parameter
 ==============================================================
 
+parameter path: data dikirim sebagai bagian dari struktur url itu sendiri (contoh: home/getuser/jhon/1). parameter ini di deklarasikan di file urls.py menggunakan kurung siku <str:name> dan mendukung beberapa konverter tipe data (str, int, slug, uuid, path) 
+
+str - Mencocokkan string apa pun yang tidak kosong dan mengecualikan pemisah jalur,'/'. Ini adalah pengaturan default jika konverter tidak disertakan dalam ekspresi.
+
+int - Mencocokkan nol atau bilangan bulat positif apa pun dan mengembalikan int. Contoh:/customer/<int:id>
+
+slug - Mencocokkan string slug apa pun yang terdiri dari huruf atau angka ASCII, termasuk karakter tanda hubung dan garis bawah.
+
+uuid - Mencocokkan UUID yang diformat.  Misalnya: 075194d3-6885-417e-a8a8-6c931e272f00 dan mengembalikan sebuah instance UUID.
+
+path - Mencocokkan string apa pun yang tidak kosong dan mencakup pemisah jalur, '/'. 
+
+parameter query data disematkan di akhir url setelah tanda tanya ? dalam format key value (contoh: ?name=john&id=1) data ini tidak di deklerasikan langsung di urls.py melalinkan diambil langsung  di dalam fungsi view menggunakan objek dicrionary request.GET
+
+parameter body: data dikirim secara tersembunyi melalui body request, umumnya melalui formulir html yang menggunakan metode post. metode ini lebih aman karena data tidak tampil di url. nilainya diambil di view menggunakan request.POST, dan form htmlnya wajib menyertakan tag {% csrf_token %} untuk mencegah celah keamanan (cross site request forgery)
+
+
+
+==============================================================
+ekspresi reguler dalam url
+==============================================================
+RegEx regular expresions
+r'^menu_item/([0-9]{2})/$'
+r ini membuat baris string yang memperlakukan simbol garis miring terbalik sebagai karakter literal dan bukan karakter pelarian		 
+^ caret simbol digunakan sebagai angkor di awal string, simbol ini dapat digunakan sebagai negasi
+$ dollar simbol digunakan sebagai angkor di akhir string
+[] untuk mendefinisikan himpunan karakter yang cocok dengan salah satu karakter didalamnya
+{} digunakan untuk jumlah pasti karakter yang mendahuluinya
+() digunakan untuk mengelompokkan bagian bagian dari RegEX
+
+RegEx dengan beberapa karakter khusus
+
+r'^/year/(?P&lt;slug&gt;[\w-]+/$'
+terkadang simbol dapat digunakan untuk satu atau lebih tujuan, atau simbol yang sama dapat berperilaku berbeda tergantung pada kasusnya
+
+==============================================================
+tata nama dan tampilan url
+==============================================================
+setiap aplikasi memiliki urlnya masing masing, url tersebut berisikan daftar urlpatterns yang dibangun menggunakan function path dan memiliki argumen argumen didalamnya yang berisikan string. path ini di atur dalam level aplikasi dan project. 
+
+reverse(): ini mereturn url yang sudah dipetakan dalam path, function ini berupa string dan inputnya itu menggunakan tag nama yang berada dalam path
+
+redirect(): ini memiliki fungsi seperti reverse hanya saja dengan tambahan fitur pengalihan atau navigasi ke url lain untuk sementara (http 302), jika menggunakan argumen permanent=True maka pengalihan akan menjadi permanent (http 301) harus lebih berhati hati dengan penggunaan tersebut karna akan mempengaruhi seo web
+
+namespace: jika muncul masalah view dengan nama yang sama di lebih dari 1 aplikasi maka namespace diperlukan untuk mengatasinya. tambahkan app_name di dalam file urls.py dalam aplikasi
+
+#demoapp/urls.py
+from django.urls import path  
+from . import views    
+app_name='demoapp' 
+urlpatterns = [  
+    path('', views.index, name='index'),      
+] 
+
+untuk mendapatkan url tersebut maka harus menambahkan kata namespace app di depannya dengan titik2 'demoapp:index' didalam argumennya. contoh reverse('demoapp:index) dalam html {% url 'demoapp:index' %}
+
+instance namespace: mirip seperti sebelumnya hanya saja ini ditambahkan dalam level project dengan menggunakan include dan argumennya namespace=demoapp. path('', include(demoapp.urls, namespace='demoapp')) 
+
+==============================================================
+penanganan kesalahan
+==============================================================
+400: bad request(permintaan tidak valid). hal ini terjadi ketika parameter yang dikirim tidak sesuai dengan yang diharapkan server.
+
+401: client harus login terlebih dahulu sebelum permintaan diproses.
+
+403: request valid tapi web server menolak untuk memprosesnya. biasanya terjadi karena client tidak memiliki izin untuk mengaksesnya
+
+404: resource tidak ada. hal ini terjadi biasanya karna path yang ditentukan tidak dapat ditemukan
+
+500: internal error. server gagal memproses request
+
+django error handling menangani semua kasus dengan memicu pengecualian yang dipicu melalui view handling yang dapat dikonfiguras. view handling ditambahkan ke file view terpisah, file .py tersebut harus dibuat ditingkat project agar diterapkan diseluruh project.
+
+tampilan yang digunakan untuk kasus kasus ini ditentukan oleh empat variable, variabel tersebut adalah handler 400, 403, 404, 500. meskipun dapat menggunakan nilai dan tampilan default untuk project, ada saatnya kita menyesuaikan tampilan agar selaras dengan gaya atau tampilannya. kostumisasi dapat dilakukan dengan mengganti nilai nilai default yang dapat di atur di berkas konfigurasi URL akar project.
+
+penting diketahui bahwa pengaturan variabel variable ini di berkas konfigurasi url lainnya tidak akan berpengaruh.
+
+untuk mengimplementasi error kostum fungsi tampilan harus menerima argumen permintaan yang seuai dan mengembalikan respons yang sesuai
+
+tampilan kostum yang dibuatu akan mengembalikan yang menangani berbagai jenis respons http misal 
+HttpsResponsNotFound - 404
+HttpsResponsBadRequest - 400
+HttpsResponsForbidden - 403
+HttpsResponsServerError - 500
+
+==============================================================
+menangani kesalahan dalam tampilan
+==============================================================
+
+Kelas pengecualian
+Kelas-kelas pengecualian Django didefinisikan dalam modul django.core.exceptions.  
+
+Beberapa jenis pengecualian yang penting adalah:
+
+ObjectDoesNotExist: Semua pengecualian di DoesNotExist diwarisi dari pengecualian dasar ini.
+
+EmptyResultSet: Kecualian ini dilemparkan jika kueri tidak mengembalikan hasil apa pun.
+
+FieldDoesNotExist: Kecualian ini dilemparkan ketika bidang yang diminta tidak ada.
+
+try: 
+    field = model._meta.get_field(field_name) 
+except FieldDoesNotExist: 
+    return HttpResponse("Field Does not exist") 
+    
+MultipleObjectsReturned: Ketika Anda mengharapkan suatu kueri mengembalikan hanya satu objek, namun yang dikembalikan adalah beberapa objek. Inilah saat Anda perlu memicu pengecualian ini.
+
+PermissionDenied: Pengecualian ini dilemparkan ketika pengguna tidak memiliki izin untuk melakukan tindakan yang diminta.
+
+def myview(request): 
+    if not request.user.has_perm('myapp.view_mymodel'): 
+        raise PermissionDenied() 
+    return HttpResponse() 
+    
+ViewDoesNotExist: Pengecualian ini dilemparkan oleh django.urls ketika tampilan yang diminta tidak ada, kemungkinan karena pemetaan yang salah yang didefinisikan di URLconf. 
+
+Saat suatu tampilan dipanggil dengan permintaan POST atau PUT, isi permintaan diisi oleh data formulir. 
+
+API Formulir Django mendefinisikan berbagai bidang yang spesifik untuk jenis data yang disimpan. Misalnya, Anda memiliki EmailField, FileField, IntegerField, MultipleChoiceField. 
+
+Bidang-bidang ini memiliki validator bawaan. Metode ` is_valid() ` mengembalikan `True ` jika validasi berhasil dilalui. Anda dapat memicu pengecualian jika metode tersebut mengembalikan `False`.
+
+def myview(request):   
+    if request.method == "POST":   
+        form = MyForm(request.POST)   
+        if form.is_valid():   
+            #process the form data 
+        else:   
+                return HttpResponse("Form submitted with invalid data") 
+                
+==============================================================
+demo: menangani kesalahan dalam tampilan
+==============================================================
+berkas settings.py ubah DEBUG=False, dan ALLOWED_HOTS=['*'] (saat production jangan masukkan ip jangan *).
+
+buat handler error di urls.py level project, tulis handler404 = 'myproject.views.handler404' di luar urlpatterns. 
+
+buat tampilan error di views.py level project
+def handler404(request, exception):
+	return HttpResponseNotFound('404: Page Not Found')
+
+
+==============================================================
+views berbasis class
+==============================================================
+
+limitasi function based views (FBV): biasanya menggunakan conditional branching untuk membedakan method http. pada aplikasi besar penggunaan ini menghasilkan spageti code yang sulit di maintain dan rentan bug
+
+delegasi logika melalui class based views (CBV): menyelesaikan masalah tersebut dengan menggunakan class untuk merespon menggunakan instanxe method bawaan yang dinamai sesuai dengan http itu sendiri, contoh def get(self, request) atau def post(self, request)
+
+modularitas dengan oop dan mixins: cbv memanfaatkan inheritance untuk menghindari repetisi code (dry) dan mixins yaitu class kecil yang berisi fitur spesifik yang dapat di gabungkan (multiple inheritance) untuk membangun view yang utuh tanpa menulis ulang code dari nol
+
+operasi umum mixins:
+Create: memasukkan data baru ke database
+List: menampilkan data
+Retrieve: mengambil satu entri data spesifik (biasanya berdasarkan id)
+Update: memodifikasi data 
+Delete: menghapus data
+
+peringatan: penggunaan mixins yang berlebihan (mencampur terlalu banyak kelas induk ke dalam satu view) akan menciptakan masalah kompleksitas yang dikenal sebagai method resolution order (mro) confusion di python. ketika sebuah bug terjadi menelusuri alur eksekusi dari hierarki class yang bertumpuk bisa jauh lebih memakan waktu dibandingkan membaca satu fungsi fbv yang panjang. oleh karna itu gunakan cbv dan mixins standar untuk crud konvensional, namun jangan ragu untuk menggunakan fbv kembali jika logika endpoint sangat spesifik atau diluar pola standar.
+
+
+==============================================================
+modul 3
+==============================================================
+==============================================================
+
 
